@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   Big,
   convert,
+  distinctDecimals,
   formatMoney,
   formatPercent,
   formatPlain,
@@ -121,5 +122,21 @@ describe('taxas e variações', () => {
     expect(formatPercent('-0.001')).toBe('0,00%')
     expect(formatSignedRate('0.4064')).toBe('+0,4064')
     expect(formatSignedRate('-0.00003', 6)).toBe('−0,000030')
+  })
+})
+
+describe('casas para distinguir compra e venda', () => {
+  it('usa as casas padrão quando já bastam', () => {
+    expect(distinctDecimals(new Big('5.3532'), new Big('5.3542'))).toBe(4)
+  })
+
+  it('acrescenta casas até que as duas taxas não pareçam iguais', () => {
+    const d = distinctDecimals(new Big('0.003919608'), new Big('0.003920392'))
+    expect(d).toBe(7)
+    expect(formatRate('0.003919608', d)).not.toBe(formatRate('0.003920392', d))
+  })
+
+  it('não cresce sem limite quando as taxas são idênticas', () => {
+    expect(distinctDecimals(new Big('0.5'), new Big('0.5'))).toBe(4)
   })
 })

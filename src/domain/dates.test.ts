@@ -8,6 +8,8 @@ import {
   formatDate,
   isIsoDate,
   isoDateInBrazil,
+  maskBrazilianDate,
+  parseBrazilianDate,
   parsePtaxDateTime,
   toAwesomeParam,
   toPtaxParam,
@@ -69,5 +71,32 @@ describe('datas de calendário', () => {
     expect(describeMoment(Date.parse('2026-10-28T19:03:00Z'), now)).toBe('hoje às 16:03')
     expect(describeMoment(Date.parse('2026-10-27T20:59:00Z'), now)).toBe('ontem às 17:59')
     expect(describeMoment(Date.parse('2026-10-23T20:59:00Z'), now)).toBe('sexta-feira, 23 de outubro às 17:59')
+  })
+})
+
+describe('datas digitadas no padrão brasileiro', () => {
+  it('lê dd/mm/aaaa sem depender do idioma do navegador', () => {
+    expect(parseBrazilianDate('29/10/2025')).toBe('2025-10-29')
+    expect(parseBrazilianDate('1/2/2024')).toBe('2024-02-01')
+    expect(parseBrazilianDate('29-02-2024')).toBe('2024-02-29')
+  })
+
+  it('recusa datas incompletas, inexistentes ou no formato americano', () => {
+    expect(parseBrazilianDate('29/10/25')).toBeNull()
+    expect(parseBrazilianDate('31/02/2026')).toBeNull()
+    expect(parseBrazilianDate('10/29/2025')).toBeNull()
+    expect(parseBrazilianDate('')).toBeNull()
+  })
+
+  it('insere as barras conforme os dígitos são digitados', () => {
+    expect(maskBrazilianDate('2')).toBe('2')
+    expect(maskBrazilianDate('291')).toBe('29/1')
+    expect(maskBrazilianDate('29102')).toBe('29/10/2')
+    expect(maskBrazilianDate('29/10/20259')).toBe('29/10/2025')
+    expect(maskBrazilianDate('29/')).toBe('29')
+  })
+
+  it('formatDate e parseBrazilianDate são inversos', () => {
+    for (const iso of ['1999-01-04', '2024-02-29', '2026-10-29']) expect(parseBrazilianDate(formatDate(iso))).toBe(iso)
   })
 })

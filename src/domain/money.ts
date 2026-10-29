@@ -130,6 +130,20 @@ export function rateDecimals(value: Numeric): number {
   return Math.min(10, -exp + 3)
 }
 
+/**
+ * Casas para exibir duas taxas lado a lado (compra e venda) sem que pareçam
+ * iguais: parte das casas padrão e acrescenta até `max` enquanto o
+ * arredondamento ainda as torna idênticas.
+ */
+export function distinctDecimals(a: Big, b: Big, max = 10): number {
+  const base = Math.max(rateDecimals(a), rateDecimals(b))
+  if (a.eq(b)) return base
+  for (let d = base; d <= max; d++) {
+    if (!a.round(d, Big.roundHalfUp).eq(b.round(d, Big.roundHalfUp))) return d
+  }
+  return max
+}
+
 export function formatRate(value: Numeric, decimals: number = rateDecimals(value)): string {
   const fixed = toBig(value).round(decimals, Big.roundHalfUp).toFixed(decimals)
   const f = formatter(`rate:${decimals}`, () =>

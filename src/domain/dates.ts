@@ -78,6 +78,26 @@ export function todayInBrazil(now: number = Date.now()): IsoDate {
   return isoDateInBrazil(now)
 }
 
+/**
+ * Lê uma data digitada como `dd/mm/aaaa` (também aceita `-` ou `.` como
+ * separador). Nunca depende do idioma do navegador. Devolve null se a data
+ * estiver incompleta ou não existir no calendário (31/02).
+ */
+export function parseBrazilianDate(text: string): IsoDate | null {
+  const m = /^\s*(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})\s*$/.exec(text)
+  if (!m) return null
+  const iso = `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`
+  return isIsoDate(iso) ? iso : null
+}
+
+/** Máscara de digitação: "29102025" → "29/10/2025", inserindo as barras conforme os dígitos chegam. */
+export function maskBrazilianDate(text: string): string {
+  const d = text.replace(/\D/g, '').slice(0, 8)
+  if (d.length <= 2) return d
+  if (d.length <= 4) return `${d.slice(0, 2)}/${d.slice(2)}`
+  return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`
+}
+
 /** Parâmetro de data da API PTAX do Banco Central: `MM-DD-AAAA`. */
 export function toPtaxParam(iso: IsoDate): string {
   const [y, m, d] = iso.split('-')
