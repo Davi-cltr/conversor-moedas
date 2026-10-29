@@ -1,0 +1,217 @@
+.secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+}
+
+.cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e-4) var(--e-7);
+}
+
+.tituloBloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  max-width: 40rem;
+}
+
+.fonte {
+  color: var(--tinta-suave);
+  font-family: var(--fonte-texto);
+  font-size: var(--t-1);
+}
+
+/* variações recentes: texto corrido de números, sem caixas */
+.panorama {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-3) var(--e-6);
+}
+
+.panorama div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+}
+
+.panorama dt {
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+}
+
+.panorama dd {
+  font-size: var(--t-3);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 100;
+}
+
+.corpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+  min-width: 0;
+}
+
+/* indicadores do período: uma régua contínua com divisões, não cartões */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.3fr);
+  border-top: 1.5px solid var(--tinta);
+  border-bottom: 1px solid var(--fio);
+}
+
+.indicadores > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--e-3) var(--e-4) var(--e-3) 0;
+}
+
+.indicadores > div + div {
+  padding-left: var(--e-4);
+  border-left: 1px solid var(--fio);
+}
+
+.indicadores dt {
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  font-weight: 520;
+}
+
+.indicadores dd:not(.quando) {
+  font-size: var(--t-3);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 100;
+}
+
+.quando {
+  color: var(--tinta-leve);
+  font-size: var(--t-0);
+  font-variant-numeric: tabular-nums;
+}
+
+.variacao dd:not(.quando) {
+  font-size: var(--t-4);
+}
+
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--e-4);
+  min-height: 18rem;
+  justify-content: center;
+  color: var(--tinta-suave);
+}
+
+.estado p {
+  max-width: 56ch;
+}
+
+.esqueleto {
+  width: 100%;
+  height: 12rem;
+  border-radius: var(--raio-controle);
+  background: repeating-linear-gradient(0deg, var(--fio) 0 1px, transparent 1px 4px);
+  opacity: 0.6;
+  mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+  animation: varre 1.6s ease-in-out infinite;
+}
+
+@keyframes varre {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.notas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  max-width: 72ch;
+}
+
+.alerta {
+  color: var(--tinta);
+}
+
+/* PTAX × comercial: lado a lado, com a explicação ao lado */
+.versus {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: var(--e-4) var(--e-7);
+  align-items: start;
+  padding: var(--e-5) 0;
+  border-top: 1px solid var(--fio);
+  border-bottom: 1px solid var(--fio);
+}
+
+.versusRotulo {
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  font-weight: 520;
+}
+
+.versusValor {
+  font-size: var(--t-4);
+  font-weight: 540;
+  font-variation-settings: 'wdth' 106;
+}
+
+.versusQuando {
+  color: var(--tinta-leve);
+  font-size: var(--t-0);
+}
+
+.versusTexto {
+  font-size: var(--t-1);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-3) var(--e-6);
+}
+
+@media (max-width: 900px) {
+  .indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .indicadores > div {
+    padding: var(--e-3) var(--e-3);
+    border-bottom: 1px solid var(--fio);
+  }
+
+  .indicadores > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .indicadores > div:nth-child(even) {
+    padding-left: var(--e-4);
+    border-left: 1px solid var(--fio);
+  }
+
+  .indicadores .variacao {
+    grid-column: 1 / -1;
+    padding-left: 0 !important;
+    border-left: 0 !important;
+    border-bottom: 0;
+  }
+
+  .versus {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .versusTexto {
+    grid-column: 1 / -1;
+  }
+}

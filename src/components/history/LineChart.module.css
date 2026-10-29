@@ -1,0 +1,149 @@
+.figura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  margin: 0;
+  min-width: 0;
+}
+
+/* leitura do ponto: fica acima do gráfico, nunca sob o dedo */
+.leitura {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--e-1) var(--e-4);
+  min-height: 3.2em;
+}
+
+.leituraData {
+  font-size: var(--t-1);
+  font-weight: 560;
+  color: var(--tinta);
+}
+
+.leituraValores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1) var(--e-4);
+  font-size: var(--t-3);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 104;
+}
+
+.leituraItem {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--e-2);
+}
+
+.leituraRotulo {
+  font-size: var(--t-1);
+  font-weight: 520;
+  color: var(--tinta-suave);
+}
+
+.amostra {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  transform: translateY(-0.3em);
+}
+
+.leituraExtra {
+  font-size: var(--t-1);
+  color: var(--tinta-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.dica {
+  flex-basis: 100%;
+  font-size: var(--t-0);
+  color: var(--tinta-leve);
+}
+
+.area {
+  position: relative;
+  width: 100%;
+  touch-action: pan-y;
+  cursor: crosshair;
+  border-radius: var(--raio-controle);
+}
+
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.grade {
+  stroke: var(--fio);
+  stroke-width: 1;
+}
+
+.base {
+  stroke: var(--tinta-suave);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.marca {
+  stroke: var(--fio-forte);
+}
+
+.eixo {
+  fill: var(--tinta-suave);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 90;
+}
+
+.linha {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.lacuna {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-dasharray: 1.5 3.5;
+  stroke-linecap: round;
+}
+
+.fim {
+  fill: currentColor;
+  stroke: var(--papel);
+  stroke-width: 2;
+}
+
+.extremo {
+  fill: var(--papel);
+  stroke: var(--ocre);
+  stroke-width: 1.5;
+}
+
+.extremoTexto {
+  fill: var(--ocre);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 90;
+  paint-order: stroke;
+  stroke: var(--papel);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.cursor {
+  stroke: var(--tinta);
+  stroke-width: 1;
+}
+
+.selecao {
+  fill: var(--papel);
+  stroke: currentColor;
+  stroke-width: 2.5;
+}

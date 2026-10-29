@@ -1,0 +1,55 @@
+.detalhes {
+  flex-basis: 100%;
+}
+
+.detalhes summary {
+  display: inline-block;
+  list-style: none;
+  min-height: 44px;
+  line-height: 44px;
+  padding: 0;
+}
+
+.detalhes summary::-webkit-details-marker {
+  display: none;
+}
+
+.rolagem {
+  max-height: 22rem;
+  margin-top: var(--e-3);
+  overflow: auto;
+  border-top: 1px solid var(--fio);
+  border-bottom: 1px solid var(--fio);
+}
+
+.tabela {
+  width: 100%;
+  max-width: 34rem;
+  border-collapse: collapse;
+  font-size: var(--t-1);
+}
+
+.tabela th,
+.tabela td {
+  padding: var(--e-2) var(--e-3);
+  text-align: right;
+  border-bottom: 1px solid var(--fio);
+}
+
+.tabela th:first-child {
+  text-align: left;
+  font-weight: 450;
+}
+
+.tabela thead th {
+  position: sticky;
+  top: 0;
+  background: var(--papel);
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  font-weight: 560;
+}
+
+.tabela tbody th {
+  font-variant-numeric: tabular-nums;
+}

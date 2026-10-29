@@ -1,0 +1,53 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--e-3) var(--e-4);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  font-weight: 520;
+}
+
+.dica,
+.erro {
+  flex-basis: 100%;
+  font-size: var(--t-0);
+}
+
+.dica {
+  color: var(--tinta-leve);
+}
+
+.erro {
+  color: var(--alerta);
+  font-weight: 560;
+}
+
+/* no celular: os cinco períodos numa linha, o personalizado ocupando a linha de baixo */
+@media (max-width: 560px) {
+  .periodos {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .periodos button {
+    min-width: 0;
+    padding-inline: 0;
+  }
+
+  .periodos button:last-child {
+    grid-column: 1 / -1;
+  }
+}
