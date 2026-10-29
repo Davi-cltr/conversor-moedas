@@ -1,0 +1,231 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+  min-height: 48px;
+  padding: 0 var(--e-3) 0 var(--e-4);
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-controle);
+  background: var(--papel-alto);
+  transition: border-color var(--movimento), background var(--movimento);
+}
+
+.trigger:hover {
+  border-color: var(--tinta-suave);
+}
+
+.code {
+  font-size: var(--t-3);
+  font-weight: 640;
+  font-variation-settings: 'wdth' 118;
+  letter-spacing: 0.02em;
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--tinta-suave);
+}
+
+/* ---------- diálogo ---------- */
+
+.dialog {
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: min(38rem, calc(100dvh - 4rem));
+  padding: 0;
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-cedula);
+  background: var(--papel-alto);
+  color: var(--tinta);
+  box-shadow: 0 24px 60px -20px rgb(10 20 25 / 0.45);
+  overflow: hidden;
+}
+
+.dialog::backdrop {
+  background: rgb(14 23 25 / 0.42);
+}
+
+.dialog[open] {
+  display: flex;
+  animation: rise var(--movimento-lento) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--e-4) var(--e-4) var(--e-2) var(--e-5);
+}
+
+.title {
+  font-size: var(--t-2);
+  font-weight: 600;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--raio-controle);
+  background: none;
+  color: var(--tinta-suave);
+}
+
+.close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.close:hover {
+  background: var(--papel-fundo);
+}
+
+.search {
+  margin: 0 var(--e-4) var(--e-3);
+  min-height: 48px;
+  padding: 0 var(--e-4);
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-controle);
+  background: var(--papel);
+  font-size: var(--t-2);
+}
+
+.search:focus-visible {
+  border-color: var(--gravura);
+}
+
+.list {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--e-2) var(--e-3);
+}
+
+.option {
+  display: grid;
+  grid-template-columns: 3.6rem 1fr auto;
+  align-items: center;
+  gap: var(--e-3);
+  min-height: 56px;
+  padding: var(--e-2) var(--e-3);
+  border-radius: var(--raio-controle);
+  cursor: pointer;
+}
+
+.option[data-group-start] {
+  margin-top: var(--e-3);
+  position: relative;
+}
+
+.option[data-group-start]::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--e-2) * -1) var(--e-3) auto;
+  border-top: 1px solid var(--fio);
+}
+
+.option[data-active] {
+  background: var(--gravura-fundo);
+}
+
+.option[aria-selected='true'] .optCode {
+  color: var(--gravura);
+}
+
+.option[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.optCode {
+  font-size: var(--t-2);
+  font-weight: 660;
+  font-variation-settings: 'wdth' 118;
+  letter-spacing: 0.02em;
+}
+
+.optName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--t-1);
+  font-weight: 520;
+  line-height: 1.3;
+}
+
+.optMeta {
+  display: flex;
+  gap: var(--e-2);
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+  font-weight: 420;
+}
+
+.symbol {
+  padding: 0 0.35em;
+  border-radius: 4px;
+  background: var(--papel-fundo);
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+
+.optSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+
+.history {
+  max-width: 9.5rem;
+  color: var(--tinta-leve);
+  font-size: var(--t-0);
+  line-height: 1.25;
+}
+
+.tag {
+  color: var(--gravura);
+  font-size: var(--t-0);
+  font-weight: 560;
+}
+
+.empty {
+  padding: var(--e-4) var(--e-5) var(--e-5);
+  color: var(--tinta-suave);
+  font-family: var(--fonte-texto);
+}
+
+@media (max-width: 560px) {
+  .dialog {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 86dvh;
+    margin: auto 0 0;
+    border-radius: var(--raio-cedula) var(--raio-cedula) 0 0;
+    border-bottom: 0;
+  }
+
+  .history {
+    display: none;
+  }
+
+  .option {
+    grid-template-columns: 3.4rem 1fr auto;
+  }
+}

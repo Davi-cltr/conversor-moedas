@@ -1,0 +1,32 @@
+.pular {
+  position: absolute;
+  left: var(--e-4);
+  top: -100px;
+  z-index: 10;
+  padding: var(--e-2) var(--e-4);
+  border-radius: var(--raio-controle);
+  background: var(--tinta);
+  color: var(--papel);
+}
+
+.pular:focus {
+  top: var(--e-4);
+}
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--e-8), 9vw, var(--e-9));
+  padding-bottom: var(--e-8);
+}
+
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--e-3) var(--e-6);
+  padding-block: var(--e-5) var(--e-7);
+  border-top: 1px solid var(--fio);
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+}

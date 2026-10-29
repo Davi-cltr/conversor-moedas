@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lastro: conversor de moedas e histórico do câmbio</title>
+    <meta
+      name="description"
+      content="Converta reais, dólares, euros e outras moedas com cotação comercial atualizada e explore o histórico oficial da PTAX do Banco Central."
+    />
+    <meta name="theme-color" content="#edf0ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1719" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://economia.awesomeapi.com.br" crossorigin />
+    <link rel="preconnect" href="https://olinda.bcb.gov.br" crossorigin />
+    <script>
+      // aplica o tema salvo antes da primeira pintura, para não piscar
+      try {
+        var t = localStorage.getItem('lastro:tema')
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>O Lastro precisa de JavaScript para buscar as cotações.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

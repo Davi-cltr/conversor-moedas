@@ -1,0 +1,126 @@
+/*
+ * Lastro — tokens do sistema visual.
+ *
+ * Conceito: a linguagem da impressão de segurança das cédulas.
+ * Papel-moeda (fundo frio, não creme), tinta de talho-doce (texto),
+ * azul de gravura (ação/seleção) e tintas das cédulas do real nas séries.
+ * Tema escuro "luz UV": a mesma cédula sob luz ultravioleta, quando
+ * as fibras de segurança acendem.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* papel e tinta */
+  --papel: #edf0ea;
+  --papel-fundo: #e2e6de;
+  --papel-alto: #f6f8f3;
+  --tinta: #16222a;
+  --tinta-suave: #4f5c64;
+  --tinta-leve: #78848b;
+  --fio: #c3cac0;
+  --fio-forte: #9aa49b;
+
+  /* tintas de destaque */
+  --gravura: #22448a;
+  --gravura-fundo: #dbe3f2;
+  --ocre: #8a6110;
+  --alerta: #8f2b3d;
+  --alerta-fundo: #f3e1e2;
+
+  /* tintas das cédulas, para séries de comparação */
+  --serie-1: #22448a; /* azul — nota de 100 */
+  --serie-2: #8a6110; /* ocre — nota de 50 */
+  --serie-3: #9a2f4c; /* carmim — nota de 10 */
+  --serie-4: #5e4396; /* violeta — nota de 5 */
+  --serie-5: #2c6a52; /* verde-cédula */
+
+  /* tipografia */
+  --fonte-dados: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --fonte-texto: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+
+  /* escala (razão ~1,25 sobre 1rem = 16px) */
+  --t-0: 0.8125rem; /* 13 — notas, eixos */
+  --t-1: 0.9375rem; /* 15 — rótulos */
+  --t-2: 1.0625rem; /* 17 — texto */
+  --t-3: 1.3125rem; /* 21 */
+  --t-4: 1.6875rem; /* 27 */
+  --t-5: 2.125rem; /* 34 */
+  --t-cedula: clamp(2.25rem, 1.2rem + 4.2vw, 4.75rem); /* valores da cédula */
+
+  /* espaço (base 4) */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4.5rem;
+  --e-9: 7rem;
+
+  /* forma: os raios seguem a hierarquia — a cédula tem canto de nota impressa, controles são mais vivos */
+  --raio-cedula: 14px;
+  --raio-controle: 8px;
+  --raio-pilula: 999px;
+
+  --largura: 74rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  --foco: 0 0 0 2px var(--papel), 0 0 0 4px var(--gravura);
+  --movimento: 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  --movimento-lento: 520ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --papel: #0e1719;
+    --papel-fundo: #152226;
+    --papel-alto: #12201f;
+    --tinta: #e3ebe5;
+    --tinta-suave: #a7b5b0;
+    --tinta-leve: #7e8e8a;
+    --fio: #2a3a3c;
+    --fio-forte: #405456;
+    --gravura: #8cc4ea;
+    --gravura-fundo: #1b3140;
+    --ocre: #e2bc62;
+    --alerta: #f0a0ad;
+    --alerta-fundo: #3a1d24;
+    --serie-1: #8cc4ea;
+    --serie-2: #e2bc62;
+    --serie-3: #ee90a8;
+    --serie-4: #bba6f0;
+    --serie-5: #84d6b1;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --papel: #0e1719;
+  --papel-fundo: #152226;
+  --papel-alto: #12201f;
+  --tinta: #e3ebe5;
+  --tinta-suave: #a7b5b0;
+  --tinta-leve: #7e8e8a;
+  --fio: #2a3a3c;
+  --fio-forte: #405456;
+  --gravura: #8cc4ea;
+  --gravura-fundo: #1b3140;
+  --ocre: #e2bc62;
+  --alerta: #f0a0ad;
+  --alerta-fundo: #3a1d24;
+  --serie-1: #8cc4ea;
+  --serie-2: #e2bc62;
+  --serie-3: #ee90a8;
+  --serie-4: #bba6f0;
+  --serie-5: #84d6b1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --movimento: 0ms linear;
+    --movimento-lento: 0ms linear;
+  }
+}

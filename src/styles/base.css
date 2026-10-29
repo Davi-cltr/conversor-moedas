@@ -1,0 +1,241 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte-dados);
+  font-size: var(--t-2);
+  line-height: 1.5;
+  font-variation-settings: 'wdth' 100;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--gravura);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--foco);
+  border-radius: var(--raio-controle);
+}
+
+::selection {
+  background: var(--gravura-fundo);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* números: sempre algarismos tabulares, para colunas alinharem */
+.num {
+  font-family: var(--fonte-dados);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* texto explicativo em serifa — a "nota" do boletim */
+.prosa {
+  font-family: var(--fonte-texto);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--tinta-suave);
+  max-width: 62ch;
+}
+
+.prosa strong {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.secao {
+  width: 100%;
+  max-width: var(--largura);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.titulo-secao {
+  font-family: var(--fonte-dados);
+  font-size: var(--t-4);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 112;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+/* botão de texto discreto */
+.botao-texto {
+  border: 0;
+  background: none;
+  padding: var(--e-1) 0;
+  color: var(--gravura);
+  font-size: var(--t-1);
+  font-weight: 520;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.botao-texto:hover {
+  text-decoration-thickness: 2px;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-2);
+  min-height: 44px;
+  padding: 0 var(--e-4);
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-controle);
+  background: var(--papel-alto);
+  font-size: var(--t-1);
+  font-weight: 540;
+  transition: background var(--movimento), border-color var(--movimento);
+}
+
+.botao:hover {
+  border-color: var(--tinta-suave);
+}
+
+/* controle segmentado: períodos, modos */
+.segmentos {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: calc(var(--raio-controle) + 3px);
+  background: var(--papel-fundo);
+}
+
+.segmentos button {
+  min-height: 38px;
+  min-width: 44px;
+  padding: 0 var(--e-3);
+  border: 0;
+  border-radius: var(--raio-controle);
+  background: transparent;
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+  font-weight: 520;
+  font-variation-settings: 'wdth' 92;
+  transition: background var(--movimento), color var(--movimento);
+}
+
+.segmentos button:hover {
+  color: var(--tinta);
+}
+
+.segmentos button[aria-pressed='true'],
+.segmentos button[aria-checked='true'] {
+  background: var(--papel-alto);
+  color: var(--tinta);
+  box-shadow: 0 0 0 1px var(--fio-forte);
+}
+
+/* direção de variação: sempre glifo + texto, a cor apenas reforça */
+.var-up,
+.var-down,
+.var-flat {
+  white-space: nowrap;
+}
+
+.var-up::before,
+.var-down::before,
+.var-flat::before {
+  display: inline-block;
+  margin-right: 0.3em;
+  font-size: 0.8em;
+  transform: translateY(-0.05em);
+}
+
+.var-up::before {
+  content: '▲';
+}
+
+.var-down::before {
+  content: '▼';
+}
+
+.var-flat::before {
+  content: '■';
+  font-size: 0.6em;
+}
+
+input[type='date'] {
+  min-height: 44px;
+  padding: 0 var(--e-3);
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-controle);
+  background: var(--papel-alto);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

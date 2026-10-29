@@ -1,0 +1,348 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+}
+
+/* ---------- a cédula ---------- */
+
+.cedula {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(7rem, 12vw, 10.5rem) 1fr;
+  grid-template-areas:
+    'faixa faixa'
+    'selo campos'
+    'rodape rodape';
+  column-gap: clamp(var(--e-4), 3vw, var(--e-7));
+  padding: 0 clamp(var(--e-4), 3vw, var(--e-7)) clamp(var(--e-4), 2.4vw, var(--e-6));
+  border: 1px solid var(--fio-forte);
+  border-radius: var(--raio-cedula);
+  /* fundo de segurança: linhas finíssimas, como o fundo impresso de uma nota */
+  background:
+    repeating-linear-gradient(
+      -32deg,
+      color-mix(in srgb, var(--gravura) 5%, transparent) 0 1px,
+      transparent 1px 7px
+    ),
+    var(--papel-alto);
+  isolation: isolate;
+}
+
+.faixa {
+  grid-area: faixa;
+  display: block;
+  width: calc(100% + 2 * clamp(var(--e-4), 3vw, var(--e-7)));
+  height: 12px;
+  margin: var(--e-3) calc(-1 * clamp(var(--e-4), 3vw, var(--e-7))) 0;
+  color: var(--gravura);
+  opacity: 0.45;
+}
+
+.selo {
+  grid-area: selo;
+  align-self: center;
+  width: 100%;
+  aspect-ratio: 1;
+  color: var(--gravura);
+}
+
+.selo [data-seal-rotor] {
+  transform-origin: 0 0;
+  transition: transform var(--movimento-lento);
+}
+
+.campos {
+  grid-area: campos;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--e-4) clamp(var(--e-3), 2vw, var(--e-5));
+  padding-top: clamp(var(--e-5), 3vw, var(--e-7));
+  padding-bottom: var(--e-5);
+}
+
+.lado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.topoLado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  min-height: 48px;
+}
+
+.rotulo {
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+  font-weight: 520;
+}
+
+/*
+ * Tamanho do número: o maior entre a escala da cédula e o que cabe na largura
+ * do lado para a quantidade de caracteres (--len). Um algarismo do Archivo
+ * expandido ocupa ~0,66 em.
+ */
+.valor,
+.resultado {
+  width: 100%;
+  min-width: 0;
+  font-size: min(var(--t-cedula), calc(100cqi / (var(--len, 6) * 0.66 + 0.3)));
+  font-weight: 480;
+  font-variation-settings: 'wdth' 110;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  min-height: calc(var(--t-cedula) * 1.1 + var(--e-1) + 2px);
+  transition: font-size var(--movimento);
+}
+
+.valor {
+  padding: 0 0 var(--e-1);
+  border: 0;
+  border-bottom: 1.5px solid var(--tinta);
+  border-radius: 0;
+  background: transparent;
+  color: var(--tinta);
+  caret-color: var(--gravura);
+}
+
+.valor::placeholder {
+  color: var(--tinta-leve);
+}
+
+.valor:focus-visible {
+  box-shadow: none;
+  border-bottom-color: var(--gravura);
+  border-bottom-width: 3px;
+  padding-bottom: calc(var(--e-1) - 1.5px);
+}
+
+.valor[aria-invalid='true'] {
+  border-bottom-color: var(--alerta);
+}
+
+.resultado {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: calc(var(--e-1) + 1.5px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--gravura);
+}
+
+.vazio {
+  color: var(--tinta-leve);
+}
+
+.carregando {
+  display: inline-block;
+  color: var(--tinta-leve);
+  font-size: var(--t-2);
+  font-weight: 450;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: 0;
+  animation: respira 1.6s ease-in-out infinite;
+}
+
+@keyframes respira {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.nome,
+.erro {
+  min-height: 1.5em;
+  font-size: var(--t-1);
+}
+
+.nome {
+  color: var(--tinta-suave);
+}
+
+.erro {
+  color: var(--alerta);
+  font-weight: 520;
+}
+
+.inverter {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-top: calc(48px + var(--e-2));
+  border: 1px solid var(--fio-forte);
+  border-radius: 50%;
+  background: var(--papel);
+  color: var(--gravura);
+  transition: transform var(--movimento-lento), border-color var(--movimento);
+}
+
+.inverter svg {
+  width: 24px;
+  height: 24px;
+}
+
+.inverter:hover {
+  border-color: var(--gravura);
+}
+
+.inverter:active {
+  transform: rotate(180deg);
+}
+
+/* ---------- rodapé da cédula: a taxa usada ---------- */
+
+.rodape {
+  grid-area: rodape;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--e-2) var(--e-6);
+  padding-top: var(--e-4);
+  border-top: 1px solid var(--fio);
+}
+
+.taxa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--e-1) var(--e-4);
+  font-size: var(--t-3);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 104;
+}
+
+.taxa [data-pulse] {
+  animation: tinta 1.2s ease-out;
+}
+
+@keyframes tinta {
+  from {
+    color: var(--gravura);
+    text-decoration: underline;
+    text-decoration-color: var(--gravura);
+  }
+}
+
+.inversa {
+  color: var(--tinta-suave);
+  font-size: var(--t-1);
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+}
+
+.compraVenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-1) var(--e-4);
+  font-size: var(--t-1);
+  color: var(--tinta-suave);
+}
+
+.compraVenda .num {
+  color: var(--tinta);
+  font-weight: 560;
+}
+
+.legenda {
+  color: var(--tinta-leve);
+}
+
+.origem {
+  flex-basis: 100%;
+  color: var(--tinta-suave);
+  font-size: var(--t-0);
+}
+
+.aviso {
+  flex-basis: 100%;
+  padding: var(--e-2) var(--e-3);
+  border-radius: var(--raio-controle);
+  background: var(--alerta-fundo);
+  color: var(--tinta);
+  font-size: var(--t-0);
+}
+
+.falha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-3) var(--e-5);
+  flex-basis: 100%;
+  color: var(--tinta);
+  font-size: var(--t-1);
+}
+
+.falha p {
+  max-width: 60ch;
+}
+
+/* ---------- abaixo da cédula ---------- */
+
+.abaixo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: var(--e-4) var(--e-7);
+  align-items: start;
+}
+
+.ressalva {
+  font-size: var(--t-1);
+}
+
+@media (max-width: 860px) {
+  .abaixo {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .cedula {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'faixa'
+      'campos'
+      'rodape';
+  }
+
+  .selo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(78vw, 300px);
+    translate: -50% -58%;
+    opacity: 0.12;
+    z-index: -1;
+  }
+
+  .campos {
+    grid-template-columns: 1fr;
+    gap: var(--e-2);
+    padding-top: var(--e-5);
+  }
+
+  .inverter {
+    justify-self: center;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    transform: rotate(90deg);
+  }
+
+  .inverter:active {
+    transform: rotate(270deg);
+  }
+
+  .taxa {
+    font-size: var(--t-2);
+  }
+}
