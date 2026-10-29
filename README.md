@@ -2,6 +2,8 @@
 
 Conversor de moedas com o histórico oficial do câmbio, feito para quem pensa em reais.
 
+**Acesse:** https://davi-cltr.github.io/conversor-moedas/
+
 O Lastro responde três perguntas, da mais rápida à mais curiosa:
 
 1. **Quanto dá?** Conversão imediata entre 20 moedas, com compra, venda e o horário da cotação.
@@ -85,6 +87,10 @@ npm run lint       # oxlint
 ```
 
 As duas APIs são públicas e aceitam chamadas do navegador. Não há chaves nem variáveis de ambiente. O build usa caminhos relativos e funciona no GitHub Pages ou em qualquer subpasta.
+
+## Deploy
+
+Cada push no `main` roda lint, testes e build no GitHub Actions e publica `dist/` no GitHub Pages (`.github/workflows/deploy.yml`). Para isso, o Pages precisa estar ativado uma vez em **Settings → Pages → Source: GitHub Actions**.
 
 ## Testes
 
