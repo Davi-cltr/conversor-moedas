@@ -47,7 +47,7 @@ export async function getJson(url: string, opts: GetJsonOptions): Promise<unknow
     let response: Response
     try {
       response = await fetchImpl(url, { signal: controller.signal, headers: { Accept: 'application/json' } })
-    } catch (error) {
+    } catch {
       if (timedOut) throw new ApiError('timeout', source, `${source} demorou demais para responder.`)
       if (signal?.aborted) throw new DOMException('Cancelado', 'AbortError')
       throw new ApiError('network', source, `Não foi possível conectar à ${source}.`)

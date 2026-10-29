@@ -38,9 +38,11 @@ export function useResource<T>(
 ): ResourceState<T> & { reload: () => void } {
   const { maxAgeMs, codec, refreshMs } = options
   const loadRef = useRef(load)
-  loadRef.current = load
   const codecRef = useRef(codec)
-  codecRef.current = codec
+  useEffect(() => {
+    loadRef.current = load
+    codecRef.current = codec
+  })
 
   const [state, setState] = useState<ResourceState<T> & { key: string | null }>({ ...EMPTY, key: null })
   const [nonce, setNonce] = useState(0)

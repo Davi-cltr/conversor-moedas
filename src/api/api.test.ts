@@ -2,8 +2,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { normalizeDaily, normalizeLatest, dailyUrl, latestUrl } from './awesome'
 import { normalizePtax, ptaxPeriodUrl } from './ptax'
 import { ApiError, getJson } from './http'
-import { clearCache, readCache, shared, writeCache } from './cache'
-import { latestCodec } from './repository'
+import { clearCache, pruneCache, readCache, shared, writeCache } from './cache'
+import { latestCodec, loadPtaxLegs } from './repository'
+import { mockFetch } from '../test/mockFetch'
 import { awesomeDailySample, awesomeLatestSample, ptaxSample } from '../test/fixtures'
 
 afterEach(() => clearCache())
@@ -137,5 +138,39 @@ describe('cache e requisições compartilhadas', () => {
     await expect(p1).rejects.toMatchObject({ name: 'AbortError' })
     expect(netSignal?.aborted).toBe(false)
     await expect(p2).resolves.toBe(7)
+  })
+})
+
+describe('séries PTAX de várias moedas', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('devolve as que vieram e marca as que falharam', async () => {
+    const { impl } = mockFetch()
+    impl.mockImplementationOnce(async () => new Response('', { status: 500 }))
+    const out = await loadPtaxLegs(['USD', 'EUR'], { start: '2026-10-01', end: '2026-10-23' }, new AbortController().signal, 1)
+    expect(out.USD).toBeInstanceOf(Error)
+    expect(out.EUR).not.toBeInstanceOf(Error)
+  })
+
+  it('falha por inteiro quando nenhuma moeda veio, em vez de parecer "sem dados"', async () => {
+    mockFetch({ offline: true })
+    await expect(
+      loadPtaxLegs(['USD', 'EUR'], { start: '2026-10-01', end: '2026-10-23' }, new AbortController().signal),
+    ).rejects.toMatchObject({ kind: 'network' })
+  })
+})
+
+describe('limpeza do cache persistido', () => {
+  it('remove entradas antigas ou corrompidas e mantém as recentes', () => {
+    const now = 1_800_000_000_000
+    localStorage.setItem('lastro:v1:velha', JSON.stringify({ savedAt: now - 9 * 86_400_000, data: 1 }))
+    localStorage.setItem('lastro:v1:nova', JSON.stringify({ savedAt: now - 3_600_000, data: 2 }))
+    localStorage.setItem('lastro:v1:quebrada', '{')
+    localStorage.setItem('lastro:tema', 'dark')
+    expect(pruneCache(7 * 86_400_000, now)).toBe(2)
+    expect(localStorage.getItem('lastro:v1:nova')).not.toBeNull()
+    expect(localStorage.getItem('lastro:v1:velha')).toBeNull()
+    // preferências fora do prefixo do cache não são tocadas
+    expect(localStorage.getItem('lastro:tema')).toBe('dark')
   })
 })

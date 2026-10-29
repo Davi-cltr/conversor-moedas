@@ -11,7 +11,7 @@ export interface CacheEntry<T> {
 
 const PREFIX = 'lastro:v1:'
 const memory = new Map<string, CacheEntry<unknown>>()
-const inflight = new Map<string, Promise<unknown>>()
+const inflight = new Map<string, Inflight>()
 
 function storage(): Storage | null {
   try {
@@ -70,7 +70,7 @@ interface Inflight {
  */
 export function shared<T>(key: string, run: (signal: AbortSignal) => Promise<T>, signal?: AbortSignal): Promise<T> {
   if (signal?.aborted) return Promise.reject(new DOMException('Cancelado', 'AbortError'))
-  let entry = inflight.get(key) as Inflight | undefined
+  let entry = inflight.get(key)
   if (!entry) {
     const controller = new AbortController()
     const created: Inflight = { controller, refs: 0, promise: Promise.resolve() }
@@ -110,6 +110,36 @@ export function shared<T>(key: string, run: (signal: AbortSignal) => Promise<T>,
       },
     )
   })
+}
+
+/**
+ * Remove do localStorage entradas salvas há mais de `maxAgeMs` (ou ilegíveis).
+ * As chaves de histórico incluem a data do dia, então sem isso elas se
+ * acumulariam a cada visita.
+ */
+export function pruneCache(maxAgeMs: number, now = Date.now()): number {
+  const s = storage()
+  if (!s) return 0
+  let removed = 0
+  try {
+    for (let i = s.length - 1; i >= 0; i--) {
+      const k = s.key(i)
+      if (!k?.startsWith(PREFIX)) continue
+      let savedAt: unknown
+      try {
+        savedAt = (JSON.parse(s.getItem(k) ?? '') as { savedAt?: unknown }).savedAt
+      } catch {
+        savedAt = undefined
+      }
+      if (typeof savedAt !== 'number' || now - savedAt > maxAgeMs) {
+        s.removeItem(k)
+        removed++
+      }
+    }
+  } catch {
+    // armazenamento bloqueado: nada a limpar
+  }
+  return removed
 }
 
 /** Só para testes. */

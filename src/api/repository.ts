@@ -3,10 +3,8 @@ import type { MarketQuote } from '../domain/rates'
 import { BASE_CURRENCY, QUOTED_CODES, pairHistorySource } from '../domain/currencies'
 import { pairSeries, type Point } from '../domain/series'
 import type { DateRange } from '../domain/periods'
-import type { Codec } from './cache'
-import { shared } from './cache'
-import { fetchLatestQuotes, type LatestQuotes } from './awesome'
-import { fetchAwesomeDaily } from './awesome'
+import { readCache, shared, writeCache, type Codec } from './cache'
+import { fetchAwesomeDaily, fetchLatestQuotes, type LatestQuotes } from './awesome'
 import { fetchPtaxSeries } from './ptax'
 
 /* ---------- cotações comerciais ---------- */
@@ -81,21 +79,33 @@ interface Leg {
   lastPublishedAt: number | null
 }
 
+const LEG_TTL_MS = 30 * 60_000
+
 function loadLeg(source: 'ptax' | 'awesome', code: string, range: DateRange, signal: AbortSignal): Promise<Leg> {
+  const key = legKey(source, code, range)
+  // pernas já baixadas nesta sessão são reaproveitadas (ex.: comparação entre moedas)
+  const hit = readCache<Leg>(key)
+  if (hit && Date.now() - hit.savedAt < LEG_TTL_MS) return Promise.resolve(hit.data)
   return shared(
-    legKey(source, code, range),
+    key,
     async (s) => {
-      if (source === 'ptax') {
-        const pts = await fetchPtaxSeries(code, range.start, range.end, s)
-        return {
-          points: pts.map((p) => ({ date: p.date, value: p.value })),
-          lastPublishedAt: pts.length ? pts[pts.length - 1].publishedAt : null,
-        }
-      }
-      return { points: await fetchAwesomeDaily(code, range.start, range.end, s), lastPublishedAt: null }
+      const leg = await fetchLeg(source, code, range, s)
+      writeCache(key, leg)
+      return leg
     },
     signal,
   )
+}
+
+async function fetchLeg(source: 'ptax' | 'awesome', code: string, range: DateRange, s: AbortSignal): Promise<Leg> {
+  if (source === 'ptax') {
+    const pts = await fetchPtaxSeries(code, range.start, range.end, s)
+    return {
+      points: pts.map((p) => ({ date: p.date, value: p.value })),
+      lastPublishedAt: pts.length ? pts[pts.length - 1].publishedAt : null,
+    }
+  }
+  return { points: await fetchAwesomeDaily(code, range.start, range.end, s), lastPublishedAt: null }
 }
 
 export function historyKey(base: string, quote: string, range: DateRange): string {
@@ -128,7 +138,12 @@ export const historyCodec: Codec<PairHistory> = {
   },
 }
 
-/** Carrega séries PTAX de várias moedas em reais, com no máximo `concurrency` requisições simultâneas. */
+/**
+ * Carrega séries PTAX de várias moedas em reais, com no máximo `concurrency`
+ * requisições simultâneas. Falhas isoladas voltam como `Error` no resultado;
+ * se TODAS falharem, a função rejeita com o primeiro erro — assim a interface
+ * mostra a falha em vez de concluir que "não há dados".
+ */
 export async function loadPtaxLegs(
   codes: readonly string[],
   range: DateRange,
@@ -149,5 +164,7 @@ export async function loadPtaxLegs(
     }
   }
   await Promise.all(Array.from({ length: Math.min(concurrency, codes.length) }, worker))
+  const results = Object.values(out)
+  if (results.length > 0 && results.every((r) => r instanceof Error)) throw results[0]
   return out
 }
